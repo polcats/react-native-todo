@@ -10,7 +10,7 @@ const App: React.FC = () => {
                     <Text style={styles.topText}>To-do List</Text>
                 </View>
                 <View style={styles.middle}>
-                    <Text style={styles.text}>Text</Text>
+                    <Text style={styles.text}>Textz</Text>
                 </View>
             </View>
         </>
