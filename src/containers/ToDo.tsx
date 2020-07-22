@@ -17,86 +17,80 @@ type RenderProps = {
   item: Item;
 };
 
-const RenderToDo: React.FC<RenderProps> = observer(({ item }) => {
-  return item.isToModify ? (
-    <EditTodo item={item} />
-  ) : (
-    <DisplayTodo item={item} />
-  );
-});
-
-const EditTodo: React.FC<RenderProps> = observer(({ item }) => {
+const ToDoItem: React.FC<RenderProps> = observer(({ item }) => {
   const appStore = useContext(appContext);
 
-  return (
-    <View key={item.id} style={[styles.displayItem]}>
-      <TextInput
-        autoFocus={true}
-        value={item.text}
-        style={[styles.displayText, styles.editText]}
-        onChangeText={(text) => item.setText(text)}
-        onBlur={() => {
-          if (item.validText) {
-            item.toggleModify();
-            return;
-          }
-          appStore.delete(item.id);
-        }}
-      />
-      <Button
-        color="green"
-        title="S"
-        onPress={() => {
-          if (item.validText) {
-            item.toggleModify();
-            return;
-          }
-          appStore.delete(item.id);
-        }}
-      />
-    </View>
-  );
-});
+  const renderModify = () => {
+    return (
+      <View key={item.id} style={[styles.displayItem]}>
+        <TextInput
+          autoFocus={true}
+          value={item.text}
+          style={[styles.displayText, styles.editText]}
+          onChangeText={(text) => item.setText(text)}
+          onBlur={() => {
+            if (item.validText) {
+              item.toggleModify();
+              return;
+            }
+            appStore.delete(item.id);
+          }}
+        />
+        <Button
+          color="green"
+          title="S"
+          onPress={() => {
+            if (item.validText) {
+              item.toggleModify();
+              return;
+            }
+            appStore.delete(item.id);
+          }}
+        />
+      </View>
+    );
+  };
 
-const DisplayTodo: React.FC<RenderProps> = observer(({ item }) => {
-  const appStore = useContext(appContext);
+  const renderDisplay = () => {
+    return (
+      <View key={item.id} style={[styles.displayItem]}>
+        <CheckBox
+          value={item.isDone}
+          onValueChange={() => {
+            item.toggleCheck();
+          }}
+          style={styles.checkbox}
+        />
+        <Text
+          onPress={() => {
+            item.toggleModify();
+          }}
+          style={[styles.displayText, item.isDone ? styles.doneText : {}]}
+        >
+          {item.text}
+        </Text>
+        <Button
+          color="rgb(218, 59, 59)"
+          title="D"
+          onPress={() => {
+            Alert.alert(
+              'Delete',
+              'Are you sure you want to delete?',
+              [
+                {
+                  text: 'Cancel',
+                },
+                { text: 'OK', onPress: () => appStore.delete(item.id) },
+              ],
+              { cancelable: false },
+            );
+          }}
+        />
+      </View>
+    );
+  };
 
-  return (
-    <View key={item.id} style={[styles.displayItem]}>
-      <CheckBox
-        value={item.isDone}
-        onValueChange={() => {
-          item.toggleCheck();
-        }}
-        style={styles.checkbox}
-      />
-      <Text
-        onPress={() => {
-          item.toggleModify();
-        }}
-        style={[styles.displayText, item.isDone ? styles.doneText : {}]}
-      >
-        {item.text}
-      </Text>
-      <Button
-        color="rgb(218, 59, 59)"
-        title="D"
-        onPress={() => {
-          Alert.alert(
-            'Delete',
-            'Are you sure you want to delete?',
-            [
-              {
-                text: 'Cancel',
-              },
-              { text: 'OK', onPress: () => appStore.delete(item.id) },
-            ],
-            { cancelable: false },
-          );
-        }}
-      />
-    </View>
-  );
+  return item.isToModify ? renderModify() : renderDisplay();
 });
 
 const ToDoList: React.FC = () => {
@@ -106,7 +100,7 @@ const ToDoList: React.FC = () => {
       style={styles.list}
       data={appStore.items}
       renderItem={({ item }) => {
-        return <RenderToDo item={item} />;
+        return <ToDoItem item={item} />;
       }}
     />
   );
