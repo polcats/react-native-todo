@@ -2,11 +2,11 @@ import React, { useContext } from 'react';
 import {
   Alert,
   Button,
+  CheckBox,
   Text,
   TextInput,
-  StyleSheet,
-  CheckBox,
   View,
+  StyleSheet,
 } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import { TodoItemProps } from '../containers/types/Types';

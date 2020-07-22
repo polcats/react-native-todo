@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import {
-  Text,
-  StyleSheet,
-  View,
   FlatList,
+  StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import { HomeStackProp } from './types/Types';
