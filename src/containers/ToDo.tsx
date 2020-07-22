@@ -96,17 +96,67 @@ const ToDoItem: React.FC<RenderProps> = observer(({ item }) => {
 const ToDoList: React.FC = () => {
   const appStore = useContext(appContext);
   return (
-    <FlatList
-      style={styles.list}
-      data={appStore.items}
-      renderItem={({ item }) => {
-        return <ToDoItem item={item} />;
-      }}
-    />
+    <View style={styles.container}>
+      <View style={styles.top}>
+        <Text style={styles.topText}>To-do List</Text>
+        <Text
+          style={styles.topButton}
+          onPress={() => {
+            appStore.add();
+          }}
+        >
+          +
+        </Text>
+      </View>
+      <View style={styles.middle}>
+        <FlatList
+          style={styles.list}
+          data={appStore.items}
+          renderItem={({ item }) => {
+            return <ToDoItem item={item} />;
+          }}
+        />
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: 25,
+  },
+  top: {
+    flexDirection: 'row',
+    backgroundColor: 'skyblue',
+    width: '100%',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  topText: {
+    fontSize: 25,
+    color: '#fff',
+    fontWeight: 'bold',
+    paddingLeft: 20,
+  },
+  topButton: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
+  },
+  middle: {
+    flex: 1,
+    backgroundColor: '#fff',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   list: {
     display: 'flex',
     flex: 1,
