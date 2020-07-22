@@ -1,23 +1,35 @@
 import React, { useState, useContext } from 'react';
-// import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { observer } from 'mobx-react-lite';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+import appContext from './src/models/ToDoStore';
+import ToDoList from './src/containers/ToDo';
 
 const App: React.FC = () => {
+  const appStore = useContext(appContext);
   return (
     <>
       <View style={styles.container}>
         <View style={styles.top}>
           <Text style={styles.topText}>To-do List</Text>
+          <Text
+            style={styles.topButton}
+            onPress={() => {
+              appStore.add();
+            }}
+          >
+            +
+          </Text>
         </View>
         <View style={styles.middle}>
-          <Text style={styles.text}>Textz</Text>
+          <ToDoList />
         </View>
       </View>
     </>
   );
 };
 
-export default App;
+export default observer(App);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -28,16 +40,24 @@ const styles = StyleSheet.create({
     paddingTop: 25,
   },
   top: {
+    flexDirection: 'row',
     backgroundColor: 'skyblue',
     width: '100%',
     height: 50,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
   },
   topText: {
     fontSize: 25,
     color: '#fff',
     fontWeight: 'bold',
+    paddingLeft: 20,
+  },
+  topButton: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
   },
   middle: {
     flex: 1,
