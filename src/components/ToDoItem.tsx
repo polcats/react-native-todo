@@ -9,8 +9,14 @@ import {
   StyleSheet,
 } from 'react-native';
 import { observer } from 'mobx-react-lite';
-import { TodoItemProps } from '../containers/types/Types';
+import { HomeNavigationProp } from '../containers/types/Types';
+import Item from '../models/Item';
 import appContext from '../models/ToDoStore';
+
+type TodoItemProps = {
+  item: Item;
+  navigation: HomeNavigationProp;
+};
 
 const ToDoItem: React.FC<TodoItemProps> = ({ item, navigation }) => {
   const appStore = useContext(appContext);
