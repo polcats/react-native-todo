@@ -4,34 +4,23 @@ import { StyleSheet, Text, View } from 'react-native';
 import 'mobx-react-lite/batchingForReactDom';
 import appContext from './src/models/ToDoStore';
 import ToDoList from './src/containers/ToDo';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+const { Navigator, Screen } = createStackNavigator();
 
 const App: React.FC = () => {
-  const appStore = useContext(appContext);
-  return <ToDoList />;
+  return (
+    <NavigationContainer>
+      <Navigator>
+        <Screen
+          name="Home"
+          options={{ title: 'To-do List' }}
+          component={ToDoList}
+        />
+      </Navigator>
+    </NavigationContainer>
+  );
 };
-
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createStackNavigator } from '@react-navigation/stack';
-
-/*
-    <>
-      <View style={styles.container}>
-        <View style={styles.top}>
-          <Text style={styles.topText}>To-do List</Text>
-          <Text
-            style={styles.topButton}
-            onPress={() => {
-              appStore.add();
-            }}
-          >
-            +
-          </Text>
-        </View>
-        <View style={styles.middle}>
-          <ToDoList />
-        </View>
-      </View>
-    </>
-*/
 
 export default observer(App);

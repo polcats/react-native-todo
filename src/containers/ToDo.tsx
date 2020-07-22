@@ -8,6 +8,7 @@ import {
   CheckBox,
   View,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import Item from '../models/Item';
@@ -97,17 +98,6 @@ const ToDoList: React.FC = () => {
   const appStore = useContext(appContext);
   return (
     <View style={styles.container}>
-      <View style={styles.top}>
-        <Text style={styles.topText}>To-do List</Text>
-        <Text
-          style={styles.topButton}
-          onPress={() => {
-            appStore.add();
-          }}
-        >
-          +
-        </Text>
-      </View>
       <View style={styles.middle}>
         <FlatList
           style={styles.list}
@@ -116,6 +106,16 @@ const ToDoList: React.FC = () => {
             return <ToDoItem item={item} />;
           }}
         />
+      </View>
+      <View style={styles.bottom}>
+        <TouchableOpacity
+          onPress={() => {
+            appStore.add();
+          }}
+          style={styles.addButtonTouch}
+        >
+          <Text style={styles.addButton}>+</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -127,28 +127,28 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingTop: 25,
+    justifyContent: 'center',
   },
-  top: {
+  bottom: {
     flexDirection: 'row',
-    backgroundColor: 'skyblue',
     width: '100%',
-    height: 50,
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-end',
   },
-  topText: {
-    fontSize: 25,
-    color: '#fff',
-    fontWeight: 'bold',
-    paddingLeft: 20,
-  },
-  topButton: {
+  addButton: {
     fontSize: 25,
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',
+  },
+  addButtonTouch: {
+    backgroundColor: 'skyblue',
+    padding: 15,
+    paddingLeft: 25,
+    paddingRight: 25,
+    borderRadius: 50,
+    marginRight: 20,
+    marginBottom: 20,
   },
   middle: {
     flex: 1,
@@ -158,11 +158,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   list: {
-    display: 'flex',
     flex: 1,
+    display: 'flex',
     flexDirection: 'column',
     width: '100%',
     padding: 20,
+    marginBottom: 10,
   },
   checkbox: {
     borderColor: '#fff',
