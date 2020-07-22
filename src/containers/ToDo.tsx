@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   Alert,
   Button,
@@ -18,10 +18,14 @@ type RenderProps = {
 };
 
 const RenderToDo: React.FC<RenderProps> = observer(({ item }) => {
-  return item.isToModify ? renderEdit(item) : renderDisplay(item);
+  return item.isToModify ? (
+    <EditTodo item={item} />
+  ) : (
+    <DisplayTodo item={item} />
+  );
 });
 
-const renderEdit = (item: Item) => {
+const EditTodo: React.FC<RenderProps> = observer(({ item }) => {
   const appStore = useContext(appContext);
 
   return (
@@ -52,9 +56,9 @@ const renderEdit = (item: Item) => {
       />
     </View>
   );
-};
+});
 
-const renderDisplay = (item: Item) => {
+const DisplayTodo: React.FC<RenderProps> = observer(({ item }) => {
   const appStore = useContext(appContext);
 
   return (
@@ -93,7 +97,7 @@ const renderDisplay = (item: Item) => {
       />
     </View>
   );
-};
+});
 
 const ToDoList: React.FC = () => {
   const appStore = useContext(appContext);
