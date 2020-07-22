@@ -13,12 +13,9 @@ import {
 import { observer } from 'mobx-react-lite';
 import Item from '../models/Item';
 import appContext from '../models/ToDoStore';
+import { HomeStackProp, TodoItemProps } from './types/Types';
 
-type RenderProps = {
-  item: Item;
-};
-
-const ToDoItem: React.FC<RenderProps> = observer(({ item }) => {
+const ToDoItem: React.FC<TodoItemProps> = observer(({ item, navigation }) => {
   const appStore = useContext(appContext);
 
   const renderModify = () => {
@@ -64,7 +61,8 @@ const ToDoItem: React.FC<RenderProps> = observer(({ item }) => {
         />
         <Text
           onPress={() => {
-            item.toggleModify();
+            // item.toggleModify();
+            navigation.navigate('Detail', { id: item.id });
           }}
           style={[styles.displayText, item.isDone ? styles.doneText : {}]}
         >
@@ -94,7 +92,7 @@ const ToDoItem: React.FC<RenderProps> = observer(({ item }) => {
   return item.isToModify ? renderModify() : renderDisplay();
 });
 
-const ToDoList: React.FC = () => {
+const ToDoList: React.FC<HomeStackProp> = ({ navigation }) => {
   const appStore = useContext(appContext);
   return (
     <View style={styles.container}>
@@ -103,7 +101,7 @@ const ToDoList: React.FC = () => {
           style={styles.list}
           data={appStore.items}
           renderItem={({ item }) => {
-            return <ToDoItem item={item} />;
+            return <ToDoItem item={item} navigation={navigation} />;
           }}
         />
       </View>
