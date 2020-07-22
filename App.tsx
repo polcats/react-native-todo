@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingTop: 25,
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
   middle: {
     flex: 1,
-    backgroundColor: '#333',
+    backgroundColor: '#fff',
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',

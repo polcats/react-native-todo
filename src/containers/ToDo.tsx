@@ -1,40 +1,136 @@
-import React, { useContext } from 'react';
-import { Text, StyleSheet, CheckBox, View, FlatList } from 'react-native';
+import React, { useContext, useState } from 'react';
+import {
+  Alert,
+  Button,
+  Text,
+  TextInput,
+  StyleSheet,
+  CheckBox,
+  View,
+  FlatList,
+} from 'react-native';
 import { observer } from 'mobx-react-lite';
 import Item from '../models/Item';
 import appContext from '../models/ToDoStore';
 
-// const renderToDo = (item: Item, key: number) => {
-//   return renderDisplay(item, key);
-// };
+type RenderProps = {
+  item: Item;
+};
 
-const renderDisplay = ({ item }: { item: Item }) => {
-  console.log(item);
+const RenderToDo: React.FC<RenderProps> = observer(({ item }) => {
+  return item.isToModify ? renderEdit(item) : renderDisplay(item);
+});
+
+const renderEdit = (item: Item) => {
+  const appStore = useContext(appContext);
+
   return (
-    <View style={[styles.displayItem]}>
-      <CheckBox />
-      <Text style={[styles.displayText]}>{item.text}</Text>
+    <View key={item.id} style={[styles.displayItem]}>
+      <TextInput
+        autoFocus={true}
+        value={item.text}
+        style={[styles.displayText, styles.editText]}
+        onChangeText={(text) => item.setText(text)}
+        onBlur={() => {
+          if (item.validText) {
+            item.toggleModify();
+            return;
+          }
+          appStore.delete(item.id);
+        }}
+      />
+      <Button
+        color="green"
+        title="S"
+        onPress={() => {
+          if (item.validText) {
+            item.toggleModify();
+            return;
+          }
+          appStore.delete(item.id);
+        }}
+      />
+    </View>
+  );
+};
+
+const renderDisplay = (item: Item) => {
+  const appStore = useContext(appContext);
+
+  return (
+    <View key={item.id} style={[styles.displayItem]}>
+      <CheckBox
+        value={item.isDone}
+        onValueChange={() => {
+          item.toggleCheck();
+        }}
+        style={styles.checkbox}
+      />
+      <Text
+        onPress={() => {
+          item.toggleModify();
+        }}
+        style={[styles.displayText, item.isDone ? styles.doneText : {}]}
+      >
+        {item.text}
+      </Text>
+      <Button
+        color="rgb(218, 59, 59)"
+        title="D"
+        onPress={() => {
+          Alert.alert(
+            'Delete',
+            'Are you sure you want to delete?',
+            [
+              {
+                text: 'Cancel',
+              },
+              { text: 'OK', onPress: () => appStore.delete(item.id) },
+            ],
+            { cancelable: false },
+          );
+        }}
+      />
     </View>
   );
 };
 
 const ToDoList: React.FC = () => {
   const appStore = useContext(appContext);
-  // return <>{appStore.items.map((item, key) => renderToDo(item, key))}</>;
   return (
     <FlatList
+      style={styles.list}
       data={appStore.items}
-      renderItem={renderDisplay}
-      // keyExtractor={(item) => item.id}
+      renderItem={({ item }) => {
+        return <RenderToDo item={item} />;
+      }}
     />
   );
 };
 
 const styles = StyleSheet.create({
+  list: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    width: '100%',
+    padding: 20,
+  },
+  checkbox: {
+    borderColor: '#fff',
+  },
   displayText: {
     flex: 1,
-    color: '#fff',
+    color: '#555',
     fontSize: 25,
+    padding: 5,
+    marginRight: 5,
+  },
+  editText: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginLeft: 31,
+    padding: 4,
   },
   doneText: {
     textDecorationLine: 'line-through',
@@ -43,13 +139,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     flexDirection: 'row',
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    borderColor: 'red',
-    borderWidth: 1,
   },
-  flex: {},
-  flexColumn: {},
+  editButton: {},
 });
 
 export default observer(ToDoList);
