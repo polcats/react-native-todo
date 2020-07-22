@@ -1,6 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { observer } from 'mobx-react-lite';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import 'mobx-react-lite/batchingForReactDom';
 import appContext from './src/models/ToDoStore';
 import ToDoList from './src/containers/ToDo';
 
